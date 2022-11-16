@@ -1,0 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<!-- 
+		* Spring framework의 특징
+		1. IOC(Inversion Of Control)
+		제어의 역전 => 객체들은 관리할 권한이 개발자가 아닌 Spring에게 있음
+					내가 직접적으로 new 구문을 이용해서 객체를 생성할 일이 거의 없음
+		
+		2. DI (Dependency Injection)
+		의존성 주입 => 객체간의 의존관계를 알아서 설정해 줌
+					예) MVC 패턴에서 Controller -> Service 객체 생성 후 메소드 호출 -> Dao 객체 생성 후 메소드 호출
+	 -->
+	 
+	 여기는 index.jsp야
+</body>
+</html>

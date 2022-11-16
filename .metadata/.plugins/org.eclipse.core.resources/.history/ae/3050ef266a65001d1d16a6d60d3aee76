@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
+	<!-- 
+		* servlet-context.xml 파일
+		스프링의 가장 핵심 부품인 DispatcherServlet과 관련된 설정을 기술하는 파일
+		즉, 요청에 대한 환경설정을 주로 기술
+		
+		* servlet-context.xml 파일의 설정 방법
+		접두어:태그명 => xmlns: 접두어로 등록된 태그들만 사용 가능
+					mvc 라는 접두어는 생략 가능
+	-->
+	
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<!--
+		@Controller, @Service와 같은 어노테이션을 사용할 수 있게 해 주는 설정(어노테이션을 사용할 수 있게 활성화하겠음)
+		
+		이 설정을 해야 하는 이유: 스프링이 알아서 객체로 만들어 관리해 줄 수 있도록 해 주는 바업 중 하나이기 때문
+		
+		*스프링에서 bean 등록 방법
+		1. xml 파일로 등록: 내가 직접 코드를 수정하거나 볼 수 없는 클래스일 경우 (jar파일에 있는 클래스를 객체로 만들고 싶은 경우)
+		2. 어노테이션을 붙여서 등록: 내가 직접 만든 클래스일 경우(Controller, Service, Dao, ...)
+	-->
+	<annotation-driven />
+
+	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
+	<!-- 
+		webapp/resources 폴더에 대한 경로
+		=> webapp/resources: 정적 외부 자원에 대해서 보관하는 폴더 (이미지, css, js, 폰트, ...)
+		
+		- mapping: resources 폴더 내부의 모든 폴더, 파일에 대해서 접근할 주소 지정
+		- locaton: 파일의 실제 위치
+		
+		이 설정을 하면 DispatcherServlet을 거치지 않고 곧바로 url 주소상으로 파일을 열람할 수 있음
+	-->
+	<resources mapping="/resources/**" location="/resources/" />
+
+	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
+	<!-- 
+		주소 자동 완성 도구(ViewResolver) 에 대한 설정
+		
+		이 설정을 해야 하는 이유: 응답 페이지 "포워딩" 시 필요함
+		=> 응답 페이지명만 적었을 때 바로 해당 페이지를 찾아서 포워딩시켜 줌
+		
+		- prefix: 접두어(/WEB-INF/views/)
+		- suffix: 접미어(.jsp)
+		
+		"/WEB-INF/views/" + 응답페이지명 + ".jsp"
+		
+	 -->
+	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<beans:property name="prefix" value="/WEB-INF/views/" />
+		<beans:property name="suffix" value=".jsp" />
+	</beans:bean>
+	
+	<context:component-scan base-package="com.kh.spring" />
+	
+	
+	
+</beans:beans>
