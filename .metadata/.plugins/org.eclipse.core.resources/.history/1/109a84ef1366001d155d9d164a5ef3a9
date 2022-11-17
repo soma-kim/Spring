@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "mybatis-3-config.dtd" >
+<configuration>
+
+	<!-- MyBatis가 구동될 때 알아야 하는 설정 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+	
+	<!-- 미리 등록해 두려면 해당 클래스가 실제로 존재하는 상태여야 함! 없다면 ClassNotFoundException 뜸 -->
+	<typeAliases>
+		<typeAlias type="com.kh.spring.member.model.vo.Member" alias="member" />
+		<typeAlias type="com.kh.spring.board.model.vo.Board" alias="board" />
+		<typeAlias type="com.kh.spring.board.model.vo.Board" alias="board" />
+	</typeAliases>
+
+</configuration>

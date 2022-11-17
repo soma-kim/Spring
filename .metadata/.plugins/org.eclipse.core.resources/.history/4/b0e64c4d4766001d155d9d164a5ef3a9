@@ -1,0 +1,13 @@
+package com.kh.spring.member.model.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository // Dao 역할을 하는 bean으로 등록하겠다!
+// 주로 DB(저장소)와 관련된 작업 (== 영속성 작업)을 처리하겠다라는 뜻
+public class MemberDao {
+	
+	public Member loginMember(SqlSessionTemplate sqlSession, Member m) {
+		
+	}
+
+}

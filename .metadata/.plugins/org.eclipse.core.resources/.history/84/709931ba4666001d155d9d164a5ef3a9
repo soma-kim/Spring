@@ -1,0 +1,10 @@
+package com.kh.spring.member.model.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository // Dao 역할을 하는 bean으로 등록하겠다!
+public class MemberDao {
+	
+	
+
+}
