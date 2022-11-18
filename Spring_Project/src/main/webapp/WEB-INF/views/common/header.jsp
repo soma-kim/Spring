@@ -63,6 +63,14 @@
 </head>
 <body>
 
+	<!-- 액션 태그의 특징: script 태그 영역 내부에서 사용할 수 없음 (인식 안 됨) -->
+	<c:if test="${ not empty alertMsg }">
+		<script>
+			alert("${ alertMsg }");
+		</script>
+		<c:remove var="alertMsg" scope="session" />
+	</c:if>
+	
     <div id="header">
         <div id="header_1">
             <div id="header_1_left">
@@ -73,7 +81,7 @@
                 <c:choose>
                 	<c:when test="${ empty loginUser }">
 		                <!-- 로그인 전 -->
-		                <a href="">회원가입</a>
+		                <a href="enrollForm.me">회원가입</a>
 		                <a data-toggle="modal" data-target="#loginModal">로그인</a>
 		                <!-- 모달의 원리 : 이 버튼 클릭시 data-targer에 제시되어있는 해당 아이디의 div요소를 띄워줌 -->
                 	</c:when>
@@ -81,7 +89,7 @@
 		                <!-- 로그인 후 -->
 	                    <label>${ loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
 	                    <a href="">마이페이지</a>
-	                    <a href="">로그아웃</a>
+	                    <a href="logout.me">로그아웃</a>
                 	</c:otherwise>
                 </c:choose>
             </div>
@@ -110,9 +118,9 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <label for="userId" class="mr-sm-2">ID : </label>
-                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId"> <br>
+                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId" required> <br>
                         <label for="userPwd" class="mr-sm-2">Password : </label>
-                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd">
+                        <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd" required>
                     </div>
                            
                     <!-- Modal footer -->

@@ -18,7 +18,13 @@ public class MemberDao {
 		
 		// 로그인 == 단일행 조회
 		// sqlSession.selectOne("mapper파일의namespace.sql구문의id값",(쿼리문이미완성이라면)넘길값);
-		return sqlSession.selectOne("memberMapper.loginMember", m.getUserId());
+		return sqlSession.selectOne("memberMapper.loginMember", m);
+		
+	}
+	
+	public int insertMember(SqlSessionTemplate sqlSession, Member m) {
+		
+		return sqlSession.insert("memberMapper.insertMember", m);
 		
 	}
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "mybatis-3-mapper.dtd" >
+<mapper namespace="memberMapper">
+
+	<!-- MEMBER 테이블로부터 조회된 내용을 Member 타입으로 가공해 주는 ResultMap -->
+
+	<!-- 로그인용 쿼리문 -->
+	<select id="loginMember" parameterType="member">
+		SELECT *
+		FROM MEMBER
+		WHERE USER_ID = #{userId}
+		AND USER_PWD = #{userPwd}
+		AND STATUS = 'Y'	
+	</select>
+</mapper>

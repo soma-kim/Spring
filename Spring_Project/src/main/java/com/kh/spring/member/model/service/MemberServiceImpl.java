@@ -41,12 +41,18 @@ public class MemberServiceImpl implements MemberService {
 		
 		Member loginUser = memberDao.loginMember(sqlSession, m);
 		
+		// SqlSessionTemplate 객체를 bean으로 등록 후 @Autowired 해 줌으로써
+		// Spring이 해당 객체를 생성해 사용 후 자동으로 객체를 반납함
+		// 내가 직접 close 메소드로 자원 반납할 필요가 없어짐!
+		
 		return loginUser;
 	}
 
 	@Override
 	public int insertMember(Member m) {
-		return 0;
+		
+		return memberDao.insertMember(sqlSession, m);
+		
 	}
 
 	@Override
