@@ -52,7 +52,7 @@ public class MemberController {
 	 * => 메소드 상단에 url 매핑값을 지정해야 함
 	 * => 메소드명은 의미를 부여해서 적당히 지어야 함
 	 * => 매개변수는 있어도 되고, 없어도 됨 (단, 매개변수가 있는 경우 DispatcherServlet이 알아서 값을 전달해 줄 것)
-	 * => *** 
+	 * => 리턴 타입은 String 타입으로 응답페이지를 지정할 수 있고, ModelAndView 타입으로도 지정 가능함
 	 */
 	
 	/*
@@ -225,6 +225,8 @@ public class MemberController {
 	@RequestMapping("login.me")
 	public ModelAndView loginMember(Member m, ModelAndView mv, HttpSession session) {
 		
+		// 암호화 작업 전 로직
+		/*
 		Member loginUser = memberService.loginMember(m);
 		
 		if(loginUser == null) { // 로그인 실패
@@ -247,7 +249,39 @@ public class MemberController {
 		
 		// 어느 경우에나 mv를 리턴하기 때문에 따로 2번 적을 필요 없이 조건문 밖에 기술해도 됨!
 		return mv;
+		*/
 		
+		// 암호화 작업 후 로직
+		// => BCrypt 방식에 의해 복호화가 불가능한 암호문 형태의 비밀번호와 일치하는지 대조 작업
+		// Member m의 userId 필드: 사용자가 입력한 아이디 (평문)
+		//           userPwd 필드: 사용자가 입력한 비밀번호 (평문)
+		Member loginUser = memberService.loginMember(m); // 그대로 호출
+		
+		// loginUser: 오로지 아이디만 가지고 조회된 회원의 정보
+		// Member loginUser의 userPwd 필드: DB에 기록된 암호화된 비밀번호
+		// 일치하는 아이디 기준으로 모든 컬럼을 가지고 왔으므로 현재 DB에서 가지고 온 정보에는 "암호화된 비밀번호"가 들어 있음
+		
+		// BCryptPasswordEncoder 객체의 matches 메소드
+		// matches(평문, 암호문) 을 작성하면 내부적으로 평문과 암호문을 맞추는 작업이 이루어짐
+		// 두 구문이 일치하는지 비교 후 일치하면 true 반환
+		if(loginUser != null &&
+				bcryptPasswordEncoder.matches(m.getUserPwd(), loginUser.getUserPwd())) {
+			
+			// 비밀번호도 일치한다면 => 로그인 성공
+			session.setAttribute("loginUser", loginUser);
+			session.setAttribute("alertMsg", "로그인에 성공했습니다.");
+						
+			mv.setViewName("redirect:/");
+			
+		} else { // 일치하지 않는다면 => 로그인 실패
+			
+			mv.addObject("errorMsg", "로그인 실패");
+			
+			// /WEB-INF/views/common/errorPage.jsp
+			mv.setViewName("common/errorPage");
+		}
+		
+		return mv;
 	}
 	
 	@RequestMapping("logout.me")
@@ -319,6 +353,87 @@ public class MemberController {
 			
 			// /WEB-INF/views/common/errorPage.jsp
 			return "common/errorPage";
+			
+		}
+		
+	}
+	
+	@RequestMapping("myPage.me")
+	public String myPage() {
+		
+		// /WEB-INF/views/member/myPage.jsp
+		return "member/myPage";
+		
+	}
+	
+	@RequestMapping("update.me")
+	public String updateMember(Member m, Model model, HttpSession session) {
+		
+		// System.out.println(m);
+		int result = memberService.updateMember(m);
+		
+		if(result > 0) { // 성공
+			
+			// 수정 성공일 경우 DB로부터 수정된 회원의 정보를 다시 조회해서
+			// session에 loginUser 키값으로 덮어씌워야 함
+			// => 이때, 기존의 loginMember 메소드를 재활용해서 조회
+			Member updateMem = memberService.loginMember(m);
+			session.setAttribute("loginUser", updateMem);
+			
+			// session에 일회성 알람 문구도 담기
+			session.setAttribute("alertMsg", "성공적으로 회원 정보가 변경되었습니다.");
+			
+			// 마이페이지 url 재요청
+			return "redirect:/myPage.me";
+			
+		} else { // 실패
+			
+			model.addAttribute("errorMsg", "회원 정보 변경 실패");
+			
+			// /WEB-INF/views/common/errorPage.jsp
+			return "common/errorPage";
+			
+		}
+		
+	}
+	
+	@RequestMapping("delete.me")
+	public String deleteMember(String userPwd, String userId, HttpSession session, Model model) {
+		
+		// userPwd: 회원 탈퇴 요청 시 사용자가 입력했던 평문 비밀번호
+		// session의 loginUser Member 객체의 userPwd 필드: 현재 이 로그인한 회원의 암호화된 비밀번호
+		// => 이 두 가지 정보가 있어야만 matches 메소드 활용 가능!
+		
+		String encPwd = ((Member)session.getAttribute("loginUser")).getUserPwd();
+		
+		// 비밀번호 대조 작업
+		if(bcryptPasswordEncoder.matches(userPwd, encPwd)) {
+			
+			// 비밀번호가 맞을 경우 => 탈퇴 처리
+			int result = memberService.deleteMember(userId);
+			
+			if(result > 0) { // 탈퇴 처리 성공
+				
+				// 로그아웃 처리 후 일회성 알람 메시지 담기, 메인 페이지로 url 재요청
+				// session.invalidate(); // 로그아웃 처리이나 사용 불가! 일회성 alert창을 띄워야 하기 때문
+				session.removeAttribute("loginUser"); // 로그인한 회원의 정보만 지워 줌
+				session.setAttribute("alertMsg", "성공적으로 탈퇴되었습니다. 그동안 이용해 주셔서 감사합니다.");
+				
+				return "redirect:/"; // 메인페이지로 url 재요청
+				
+			} else { // 탈퇴 처리 실패 => 에러 문구를 담아서 에러 페이지로 포워딩
+				
+				model.addAttribute("errorMsg", "회원 탈퇴 실패");
+				
+				// /WEB-INF/views/common/errorPage.jsp
+				return "common/erroePage";
+				
+			}
+			
+		} else { // 비밀번호가 틀릴 경우 => 비밀번호 틀렸다고 알려 주고 마이페이지 url 재요청
+			
+			session.setAttribute("alertMsg", "비밀번호를 잘못 입력하였습니다. 확인해 주세요.");
+			return "redirect:/myPage.me";
 			
 		}
 		

@@ -7,4 +7,5 @@
 <fullyQualifiedTypeName name="com.kh.spring.member.model.vo.Member"/>
 <fullyQualifiedTypeName name="org.springframework.ui.Model"/>
 <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
+<fullyQualifiedTypeName name="com.kh.spring.common.template.Pagination"/>
 </qualifiedTypeNameHistroy>

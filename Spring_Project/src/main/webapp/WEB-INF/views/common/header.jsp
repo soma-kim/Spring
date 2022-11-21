@@ -6,6 +6,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
+    
+    <!-- Alertify 라이브러리 -->
+    <!-- JavaScript -->
+	<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+	<!-- CSS -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+	<!-- Default theme -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+	<!-- Semantic UI theme -->
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+    
     <!-- jQuery 라이브러리 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- 부트스트랩에서 제공하고 있는 스타일 -->
@@ -66,7 +77,8 @@
 	<!-- 액션 태그의 특징: script 태그 영역 내부에서 사용할 수 없음 (인식 안 됨) -->
 	<c:if test="${ not empty alertMsg }">
 		<script>
-			alert("${ alertMsg }");
+			// alert("${ alertMsg }");
+			alertify.alert("서비스 성공", "${ alertMsg }");
 		</script>
 		<c:remove var="alertMsg" scope="session" />
 	</c:if>
@@ -88,7 +100,7 @@
                 	<c:otherwise>            	                
 		                <!-- 로그인 후 -->
 	                    <label>${ loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
-	                    <a href="">마이페이지</a>
+	                    <a href="myPage.me">마이페이지</a>
 	                    <a href="logout.me">로그아웃</a>
                 	</c:otherwise>
                 </c:choose>
@@ -98,7 +110,7 @@
             <ul>
                 <li><a href="">HOME</a></li>
                 <li><a href="">공지사항</a></li>
-                <li><a href="">자유게시판</a></li>
+                <li><a href="list.bo">자유게시판</a></li>
                 <li><a href="">사진게시판</a></li>
             </ul>
         </div>
