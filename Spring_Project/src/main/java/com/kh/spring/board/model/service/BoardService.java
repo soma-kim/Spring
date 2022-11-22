@@ -20,6 +20,9 @@ public interface BoardService {
 	// 게시글 상세 조회 요청
 	Board selectBoard(int boardNo);
 	
+	// 게시글 작성 서비스
+	int insertBoard(Board b);
+	
 	// 게시글 삭제 서비스
 	int deleteBoard(int boardNo);
 	
