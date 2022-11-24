@@ -252,7 +252,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping("update.bo")
-	public void updateBoard(Board b, MultipartFile reupfile, HttpSession session) {
+	public String updateBoard(Board b, MultipartFile reupfile, HttpSession session, Model model) {
 		
 		if(!reupfile.getOriginalFilename().equals("")) { // 새로 넘어온 첨부파일이 있는 경우 == reupfile이 빈 문자열이 아니라면
 			
@@ -276,9 +276,47 @@ public class BoardController {
 			b.setOriginName(reupfile.getOriginalFilename()); // 원본 파일명 덮어 씌움
 			b.setChangeName("resources/uploadFiles/" + changeName);
 			
-		} else { // 새로 넘어온 첨부파일이 없는 경우
-			
-		}
+		} // 새롭게 들어온 첨부파일이 없다면 굳이 파일의 원본/수정명을 바꿀 필요 없으므로 else문 없이 끝!
+				
+				/*
+				 * b에 무조건 담겨 있는 내용
+				 * boardNo, boardTitle, boardContent
+				 * 
+				 * 추가적으로 고려해야 할 경우의 수
+				 * 1. 새로 첨부된 파일 X, 기존 첨부파일 x
+				 * => originName: null, changeName: null
+				 * 
+				 * 2. 새로 첨부된 파일 X, 기존 첨부파일 O
+				 * => originName: 기존 첨부파일 원본명
+				 *    changeName: 기존 첨부파일 수정명 + 파일 경로
+				 *    
+				 * 3. 새로 첨부된 파일 O, 기존 첨부파일 X
+				 * => originName: 새로 첨부된 파일의 원본명
+				 *    changeName: 새로 첨부된 파일의  수정명 + 파일 경로
+				 * 
+				 * 4. 새로 첨부된 파일 O, 기존 첨부파일 O
+				 * => 기존 파일 삭제
+				 * => 새로이 전달된 파일을 서버에 업로드
+				 * => originName: 새로 첨부된 파일의 원본명
+				 *    changeName: 새로 첨부된 파일의  수정명 + 파일 경로
+				 */
+				
+				// Service단으로 b 보내기
+				int result = boardService.updateBoard(b);
+				
+				if(result > 0) { // 게시글 수정 성공
+					
+					session.setAttribute("alertMsg", "성공적으로 게시글이 수정되었습니다.");
+					
+					// 게시글 상세보기 페이지로 url 재요청
+					return "redirect:/detail.bo?bno=" + b.getBoardNo();
+					
+				} else { // 게시글 수정 실패
+					
+					model.addAttribute("errorMsg", "게시글 수정 실패");
+					return "common/errorMsg";
+					
+				}
 		
 	}
 

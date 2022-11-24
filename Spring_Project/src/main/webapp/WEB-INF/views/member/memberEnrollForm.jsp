@@ -17,10 +17,11 @@
             <h2>회원가입</h2>
             <br>
 
-            <form action="insert.me" method="post">
+            <form action="insert.me" method="post" id="enrollForm">
                 <div class="form-group">
                     <label for="userId">* ID : </label>
                     <input type="text" class="form-control" id="userId" placeholder="Please Enter ID" name="userId" required> <br>
+                    <div id="checkResult" style="font-size:0.8em; display:none;"></div>
 
                     <label for="userPwd">* Password : </label>
                     <input type="password" class="form-control" id="userPwd" placeholder="Please Enter Password" name="userPwd" required> <br>
@@ -51,12 +52,43 @@
                 </div> 
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn btn-primary">회원가입</button>
+                    <button type="submit" class="btn btn-primary" disabled>회원가입</button>
                     <button type="reset" class="btn btn-danger">초기화</button>
                 </div>
             </form>
         </div>
         <br><br>
+        
+        <script>
+        	$(function() {
+        		
+        		// 아이디를 입력받는 input 요소 객체를 변수에 담아두기 => keyup 이벤트 걸기
+        		var $idInput = $("#enrollForm input[name=userId]");
+        		
+        		$idInput.keyup(function() {
+        			
+        			// 우선 최소 5글자 이상으로 아이디값이 입력되어 있을 때만 ajax 요청
+        			// => 쿼리문의 갯수가 한정되어 있을 수 있기 때문
+        			if($idInput.val().length >= 5) {
+        				
+        				// ajax를 요청하여 중복체크
+        				$.ajax({
+        					url : "idCheck.me",
+        					data : {checkId : $idInput.val()},
+        					success : function() {
+        						
+        					},
+        					error : function() {
+        						console.log("아이디 중복 체크용 ajax 통신 실패!");
+        					}
+        				});
+        				
+        			}
+        			
+        		});
+        		
+        	});
+        </script>
 
     </div>
 

@@ -439,4 +439,11 @@ public class MemberController {
 		
 	}
 	
+	@RequestMapping("idCheck.me")
+	public void idCheck(String checkId) {
+		
+		System.out.println(checkId);
+		
+	}
+	
 }

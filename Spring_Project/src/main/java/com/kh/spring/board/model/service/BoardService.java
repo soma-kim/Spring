@@ -27,7 +27,7 @@ public interface BoardService {
 	int deleteBoard(int boardNo);
 	
 	// 게시글 수정 서비스
-	int updateBoard(int boardNo);
+	int updateBoard(Board b);
 	
 	// 댓글 리스트 조회용 서비스(Ajax)
 	int insertReply(Reply r);
