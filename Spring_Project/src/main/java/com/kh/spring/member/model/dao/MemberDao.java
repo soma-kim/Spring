@@ -39,5 +39,11 @@ public class MemberDao {
 		// 1 또는 0이 리턴되어 돌아갈 것
 		return sqlSession.update("memberMapper.deleteMember", userId);
 	}
+	
+	public int idCheck(SqlSessionTemplate sqlSession, String checkId) {
+		
+		return sqlSession.selectOne("memberMapper.idCheck", checkId);
+		
+	}
 
 }

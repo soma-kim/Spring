@@ -75,13 +75,41 @@
         				$.ajax({
         					url : "idCheck.me",
         					data : {checkId : $idInput.val()},
-        					success : function() {
+        					success : function(result) {
         						
+        						// console.log(result);
+        						
+        						if(result == "NNNNN") { // 사용 불가능
+        							
+        							// 빨간색 메시지 출력
+        							$("#checkResult").show();
+        							$("#checkResult").css("color", "red").text("중복된 아이디가 존재합니다. 다시 입력해 주세요.");
+        							
+        							// 사용 가능 아이디를 쳤다가 다시 불가능한 아이디를 친다면 버튼 비활성화
+        							$("#enrollForm button[type=submit]").attr("disabled", true);
+        							
+        						} else { // 사용 가능
+        							
+        							// 초록색 메시지 출력
+        							$("#checkResult").show();
+        							$("#checkResult").css("color", "green").text("멋진 아이디네요!");
+        							
+        							// 버튼 활성화
+        							$("#enrollForm button[type=submit]").attr("disabled", false);
+        							
+        						}
+        					
         					},
         					error : function() {
         						console.log("아이디 중복 체크용 ajax 통신 실패!");
         					}
         				});
+        				
+        			} else { // 5글자 이하라면? 혹은 사용자가 5글자 이상의 아이디를 쳤다가 다시 5글자 미만으로 줄인다면? 
+        					
+        				// 버튼 비활성화 및 메시지 내용 숨기기
+        				$("#checkResult").hide();
+        				$("#enrollForm button[type=submit]").attr("disabled", true);
         				
         			}
         			

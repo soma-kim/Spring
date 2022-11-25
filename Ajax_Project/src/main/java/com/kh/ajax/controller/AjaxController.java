@@ -1,8 +1,11 @@
 package com.kh.ajax.controller;
 
+import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.kh.ajax.model.vo.Member;
 
 @Controller
 public class AjaxController {
@@ -57,6 +60,7 @@ public class AjaxController {
 	 * 
 	 */
 	
+	/*
 	@ResponseBody
 	@RequestMapping(value="ajax1.do", produces="text/html; charset=UTF-8")
 	public String ajaxMethod1(String name, int age) {
@@ -74,5 +78,77 @@ public class AjaxController {
 		// 이때, 응답 데이터에 한글이 있다면 response.setContentType() 메소드에서 지정한 설정
 		
 	}
+	*/
+	
+	/*
+	// 다수의 응답 데이터가 있을 경우
+	@RequestMapping("ajax1.do")
+	public void ajaxMethod1(String name, int age, HttpServletResponse response) throws IOException {
+		
+		// 요청 처리가 다 되었다는 가정 하에 데이터 응답
+		// response.setContentType("text/html; charset=UTF-8");
+		// response.getWriter().print(name);
+		// response.getWriter().print(age);
+		// 따로 통로를 열어 보낼 수는 있지만 보내면 한 개의 문자열로 연이어서 보내는 꼴임
+		// 홍길동30 => 여러 개의 데이터가 연달아서 응답됨
+		
+		// JSON(JavaScript Object Natation) 형태로 응답
+		// JSONArray => [값, 값, 값, ...] => 자바스크립트의 배열 형식(자바로 따지면 ArrayList)
+		
+		// 1. JSONArray로 담아서 응답
+		// JSONArray jArr = new JSONArray(); // []: 이 시점에 빈 배열 생성됨
+		// jArr.add(name); // ["홍길동"]
+		// jArr.add(age); // ["홍길동", 30]
+		
+		// response.setContentType("application/json; charset=UTF-8");
+		// response.getWriter().print(jArr);
+		
+		// 2. JSONObject로 담아서 응답
+		JSONObject jObj = new JSONObject(); // {}
+		jObj.put("name", name); // {name:"홍길동"}
+		jObj.put("age", age); // {name:"홍길동", age:30}
+		
+		response.setContentType("application/json; charset=UTF-8");
+		response.getWriter().print(jObj);
+		
+		
+	}
+	*/
+	
+	// 여러 개의 응답 데이터를 넘기는 경우 (response 객체 사용 안 함)
+	@ResponseBody
+	@RequestMapping(value="ajax1.do", produces="application/json; charset=UTF-8")
+	public String ajaxMethod1(String name, int age) {
+		
+		// 다수의 응답 데이터가 있다라는 가정 하에 JSONObject 타입으로 넘기기
+		JSONObject jObj = new JSONObject(); // {}
+		jObj.put("name", name); // {name:"홍길동"}
+		jObj.put("age", age); // {name:"홍길동", age:30}
+		
+		return jObj.toJSONString();
+		
+	}
+	
+	/*
+	@ResponseBody
+	@RequestMapping(value="ajax2.do", produces="application/json; charset=UTF-8")
+	public String ajaxMethod2(int userNo) {
+		
+		// DB로부터 조회했다는 가정 하에 Member 객체 생성하기
+		Member m = new Member("user01", "pass01", "홍길동", 20, "01011112222");
+		
+		// JSON 형태로 만들어서 응답 (내가 일일이 필드명을 키값으로 지정해 줌)
+		JSONObject jObj = new JSONObject();
+		jObj.put("userId", m.getUserId());
+		jObj.put("userName", m.getUserName());
+		jObj.put("age", m.getAge());
+		jObj.put("phone", m.getPhone());
+		
+		return jObj.toJSONString();
+	}
+	*/
+	
+	// GSON : Google JSON의 약자
+	// => VO 객체를 JSONObject로 가공할 때 내부적으로 필드명을 키값으로 잡아서 가공해 줌
 
 }

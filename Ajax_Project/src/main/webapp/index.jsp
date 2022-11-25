@@ -33,7 +33,24 @@
 				},
 				success : function(result) {
 					// console.log(result);
-					$("#result1").text(result);
+					// 응답 데이터가 한 개일 경우
+					// $("#result1").text(result);
+					
+					// 응답 데이터가 여러 개일 경우(JSONArray로 보냈을 경우)
+					/*
+					var resultStr = "이름: " + result[0] + "<br>"
+								  + "나이: " + result[1] + "<br>";
+								  
+					$("#result1").html(resultStr);
+					*/
+					
+					// 응답 데이터가 여러 개일 경우(JSONObject로 보냈을 경우)
+					// => 객체에서 속성값에 접근할 경우: 객체명.속성명
+					var resultStr = "이름: " + result.name + "<br>"
+					  			  + "나이: " + result.age + "<br>"; 
+					
+					$("#result1").html(resultStr);
+					
 				},
 				error : function() {
 					console.log("ajax 통신 실패!");
@@ -41,6 +58,45 @@
 			});
 		}
 	</script>
+	
+	<hr>
+	
+	<h3>2. 조회 요청 후 조회된 한 회원의 객체를 응답 받아서 출력해 보기</h3>
+	조회할 회원번호: <input type="number" id="userNo">
+	<button id="btn">조회</button>
+	<br>
+	<div id="result2"></div>
+	
+	<script>
+		$(function() {
+			
+			$("#btn").click(function() {
+				
+				var userNo = $("#userNo").val();
+				
+				$.ajax({
+					url : "ajax2.do",
+					data : {userNo : userNo},
+					success : function(result) {
+						
+						// console.log(result);
+						var resultStr = "<ul>"
+									  +	"<li>이름: " + result.userName + "</li>"
+									  +	"<li>아이디: " + result.userId + "</li>"
+									  +	"<li>나이: " + result.age + "</li>"
+									  +	"<li>휴대폰: " + result.phone + "</li>"
+									  + "</ul>";
+									  
+						$("#result2").html(resultStr);
+					},
+					error : function() {
+						console.log("ajax 통신 실패!");
+					}
+				});
+			});
+		});
+	</script>
+	
 	
 
 

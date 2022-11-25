@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.spring.member.model.service.MemberService;
@@ -439,10 +440,28 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping("idCheck.me")
-	public void idCheck(String checkId) {
+	@ResponseBody
+	@RequestMapping(value="idCheck.me", produces="text/html; charset=UTF-8")
+	public String idCheck(String checkId) {
 		
-		System.out.println(checkId);
+		// System.out.println(checkId);
+		
+		int count = memberService.idCheck(checkId);
+		
+		/*
+		if(count > 0) { // 이미 존재하는 아이디 => 사용 불가능 (NNNNN)
+			
+			return "NNNNN";
+			
+		} else { // 사용 가능 (NNNNY)
+			
+			return "NNNNY";
+			
+		}
+		*/
+		
+		// 위와 같이 if문을 써도 무방하나 삼항연산자로도 표현 가능함!
+		return (count > 0) ? "NNNNN" : "NNNNY";
 		
 	}
 	
