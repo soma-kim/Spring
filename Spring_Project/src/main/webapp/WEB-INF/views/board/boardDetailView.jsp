@@ -99,35 +99,107 @@
             <table id="replyArea" class="table" align="center">
                 <thead>
                     <tr>
-                        <th colspan="2">
-                            <textarea class="form-control" name="" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
-                        </th>
-                        <th style="vertical-align:middle"><button class="btn btn-secondary">등록하기</button></th>
+                    
+                    	<c:choose>
+                    		<c:when test="${ empty loginUser }">
+                    			<!-- 로그인 전 -->                 	
+		                        <th colspan="2">
+		                            <textarea class="form-control" name="" id="content" cols="55" rows="2" style="resize:none; width:100%;" readonly>로그인한 사용자만 이용 가능한 서비스입니다. 로그인 후 이용 바랍니다.</textarea>
+		                        </th>
+		                        <th style="vertical-align:middle"><button class="btn btn-secondary" disabled>등록하기</button></th>
+                    		</c:when>
+                    		<c:otherwise>
+                    			<!-- 로그인 후 -->                 	
+		                        <th colspan="2">
+		                            <textarea class="form-control" name="" id="content" cols="55" rows="2" style="resize:none; width:100%;"></textarea>
+		                        </th>
+		                        <th style="vertical-align:middle"><button class="btn btn-secondary" onclick="addReply();">등록하기</button></th>
+                    		</c:otherwise>
+                    	</c:choose>
+
                     </tr>
                     <tr>
-                        <td colspan="3">댓글(<span id="rcount">3</span>)</td>
+                        <td colspan="3">댓글(<span id="rcount">0</span>)</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>user02</th>
-                        <td>ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ꿀잼</td>
-                        <td>2020-03-12</td>
-                    </tr>
-                    <tr>
-                        <th>user01</th>
-                        <td>재밌어요</td>
-                        <td>2020-03-11</td>
-                    </tr>
-                    <tr>
-                        <th>admin</th>
-                        <td>댓글입니다!!</td>
-                        <td>2020-03-10</td>
-                    </tr>
                 </tbody>
             </table>
         </div>
         <br><br>
+        
+        <script>
+        	// 모든 요소들이 화면에 출력된 다음 바로 실행
+        	$(function() {
+        		selectReplyList();
+        	});
+        	
+        	 // 해당 게시글에 딸린 댓글 리스트 조회용 ajax 요청
+        	function selectReplyList() {
+        		
+        		 $.ajax({
+        			url : "rlist.bo",
+        			data : {bno: ${ b.boardNo }},
+        			success : function(result) {
+        				
+        				// console.log(result);
+        				
+        				var resultStr = "";
+        				
+        				for(var i = 0; i < result.length; i++) {
+        					
+        					resultStr += "<tr>"
+        									+ "<td>" + result[i].replyWriter + "</td>"
+        									+ "<td>" + result[i].replyContent + "</td>"
+        									+ "<td>" + result[i].createDate + "</td>"
+        							   + "</tr>";
+        					
+        				}
+        				
+        				$("#replyArea>tbody").html(resultStr);
+        				
+        				// 댓글 개수 출력 => 기존 0에서 조회된 값으로 덮어씌우기
+        				$("#rcount").text(result.length);
+        				
+        			},
+        			error : function() {
+        				console.log("댓글 리스트 조회용 ajax 통신 실패!");
+        			}
+        		 });
+        		 
+        	}
+        	 
+        	function addReply() { // 댓글 작성 요청용 ajax
+        		
+        		// form 태그 내에서는 required 속성이 적용되지만
+        		// form 태그 밖에서는 required 속성이 소용 없음!
+        		// => 댓글 내용이 있는지 먼저 검사 후에 있다면 ajax 요청 보내기!
+        		//    (textarea 요소에 value 속성값 기준으로 공백 제거 후 길이가 0이 아닌 경우)
+        		if($("#content").val().trim().length != 0) {
+        			
+        			$.ajax({
+        				url : "rinsert.bo",
+        				data : { // ajax 요청 또한 커맨드 객체 방식 가능 (키값을 필드명이랑 맞춰 줌)
+        					refBoardNo:${ b.boardNo },
+        					replyWriter:"${ loginUser.userId }",
+        					replyContent:$("#content").val()
+        				},
+        				success : function() {
+        					
+        				},
+        				error : function() {
+        					console.log("댓글 작성용 ajax 통신 실패!");
+        				}
+        			});
+        			
+        		} else {
+        			
+        			alertify.alert("댓글 작성 실패!", "댓글 작성 후 등록 가능합니다.");
+        			
+        		}
+        		
+        	}
+        </script>
 
     </div>
     

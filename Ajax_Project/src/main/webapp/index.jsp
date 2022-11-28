@@ -79,7 +79,7 @@
 					data : {userNo : userNo},
 					success : function(result) {
 						
-						// console.log(result);
+						console.log(result);
 						var resultStr = "<ul>"
 									  +	"<li>이름: " + result.userName + "</li>"
 									  +	"<li>아이디: " + result.userId + "</li>"
@@ -95,6 +95,58 @@
 				});
 			});
 		});
+	</script>
+	
+	<hr>
+	
+	<h3>3. 조회 요청 후 조회된 회원 리스트를 응답받아서 출력해 보기</h3>
+	
+	<button onclick="test3();">회원 전체 조회</button>
+	<br><br>
+	
+	<table border="1" id="result3">
+		<thead>
+			<tr>
+				<th>아이디</th>
+				<th>이름</th>
+				<th>나이</th>
+				<th>전화번호</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+	
+	<script>
+		function test3() {
+			
+			$.ajax({
+				url : "ajax3.do",
+				success : function(result) {
+					
+					// console.log(result);
+	
+					var resultStr = "";
+					
+					for(var i = 0; i < result.length; i++) {
+						
+						resultStr += "<tr>"
+										+ "<td>" + result[i].userId + "</td>"
+										+ "<td>" + result[i].userName + "</td>"
+										+ "<td>" + result[i].age + "</td>"
+										+ "<td>" + result[i].phone + "</td>"
+								   + "</tr>";
+
+					}
+					
+					$("#result3>tbody").html(resultStr);
+
+				},
+				error : function() {
+					console.log("ajax 통신 실패!");
+				}
+			});
+		}
 	</script>
 	
 	

@@ -29,7 +29,12 @@ public interface BoardService {
 	// 게시글 수정 서비스
 	int updateBoard(Board b);
 	
-	// 댓글 리스트 조회용 서비스(Ajax)
+	// 댓글 작성용 서비스(Ajax)
 	int insertReply(Reply r);
+
+	// 댓글 리스트 조회 서비스 (select)
+	ArrayList<Reply> selectReplyList(int boardNo);
+	
+	
 	
 }

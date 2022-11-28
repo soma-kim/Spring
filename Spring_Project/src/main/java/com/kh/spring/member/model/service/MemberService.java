@@ -1,5 +1,8 @@
 package com.kh.spring.member.model.service;
 
+import java.util.ArrayList;
+
+import com.kh.spring.board.model.vo.Reply;
 import com.kh.spring.member.model.vo.Member;
 
 public interface MemberService {

@@ -13,11 +13,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.spring.board.model.service.BoardService;
 import com.kh.spring.board.model.vo.Board;
+import com.kh.spring.board.model.vo.Reply;
 import com.kh.spring.common.model.vo.PageInfo;
 import com.kh.spring.common.template.Pagination;
 
@@ -169,6 +172,13 @@ public class BoardController {
 		
 	}
 	
+	@RequestMapping(value="rinsert.bo")
+	public void ajaxInsertReply(Reply r) {
+		
+		System.out.println(r);
+		
+	}
+	
 	// 현재 넘어온 첨부파일 그 자체를 수정명으로 서버의 폴더에 저장시키는 메소드 (일반 메소드 - 요청 처리 목적이 아닌 일반 메소드 목적!)
 	// => Spring의 Controller 메소드가 반드시 요청을 처리하는 메소드로 이루어져야 하는 건 아님!
 	public String saveFile(MultipartFile upfile, HttpSession session) {
@@ -317,6 +327,18 @@ public class BoardController {
 					return "common/errorMsg";
 					
 				}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="rlist.bo", produces="application/json; charset=UTF-8")
+	public String ajaxSelectReplyList(int bno) {
+		
+		// System.out.println(bno);
+		
+		ArrayList<Reply> list = boardService.selectReplyList(bno);
+		
+		return new Gson().toJson(list);
 		
 	}
 

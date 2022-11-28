@@ -1,10 +1,13 @@
 package com.kh.ajax.controller;
 
+import java.util.ArrayList;
+
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.kh.ajax.model.vo.Member;
 
 @Controller
@@ -129,14 +132,14 @@ public class AjaxController {
 		
 	}
 	
-	/*
+
 	@ResponseBody
 	@RequestMapping(value="ajax2.do", produces="application/json; charset=UTF-8")
 	public String ajaxMethod2(int userNo) {
 		
 		// DB로부터 조회했다는 가정 하에 Member 객체 생성하기
 		Member m = new Member("user01", "pass01", "홍길동", 20, "01011112222");
-		
+		/*
 		// JSON 형태로 만들어서 응답 (내가 일일이 필드명을 키값으로 지정해 줌)
 		JSONObject jObj = new JSONObject();
 		jObj.put("userId", m.getUserId());
@@ -145,10 +148,31 @@ public class AjaxController {
 		jObj.put("phone", m.getPhone());
 		
 		return jObj.toJSONString();
-	}
+
 	*/
 	
 	// GSON : Google JSON의 약자
 	// => VO 객체를 JSONObject로 가공할 때 내부적으로 필드명을 키값으로 잡아서 가공해 줌
+	Gson gson = new Gson();
+	return gson.toJson(m); // {userId : "user01", userName : "홍길동", ...}
 
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value="ajax3.do", produces="application/json; charset=UTF-8")
+	public String ajaxMethod3() {
+
+		// DB를 통해 모든 회원의 정보를 조회했다라는 가정하에 ArrayList 생성
+		ArrayList<Member> list = new ArrayList<Member>();
+								// JDK 8 버전 쓸 때는 문법상 <제네릭> 생략이 가능했으나 6 버전에서는 생략 불가함!
+		
+		list.add(new Member("user01", "pass01", "홍길동", 20, "01011112222"));
+		list.add(new Member("user02", "pass02", "김말똥", 30, "01022223333"));
+		list.add(new Member("user03", "pass03", "박개순", 25, "01099998888"));
+		list.add(new Member("user04", "pass04", "이말순", 50, "01088887777"));
+
+		return new Gson().toJson(list);
+		
+	}
 }

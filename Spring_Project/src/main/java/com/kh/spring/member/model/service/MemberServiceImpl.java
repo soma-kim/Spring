@@ -1,9 +1,12 @@
 package com.kh.spring.member.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.spring.board.model.vo.Reply;
 import com.kh.spring.member.model.dao.MemberDao;
 import com.kh.spring.member.model.vo.Member;
 

@@ -9,4 +9,6 @@
 <fullyQualifiedTypeName name="lombok.AllArgsConstructor"/>
 <fullyQualifiedTypeName name="com.kh.spring.common.template.Pagination"/>
 <fullyQualifiedTypeName name="java.util.Date"/>
+<fullyQualifiedTypeName name="org.json.simple.JSONObject"/>
+<fullyQualifiedTypeName name="com.kh.ajax.model.vo.Member"/>
 </qualifiedTypeNameHistroy>
