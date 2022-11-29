@@ -1,0 +1,6 @@
+INFO : com.kh.spring.TestClass - 난 info야(2022-11-29 15:12:10)
+WARN : com.kh.spring.TestClass - 난 warn이야(2022-11-29 15:12:10)
+ERROR: com.kh.spring.TestClass - 난 error야(2022-11-29 15:12:10)
+INFO : com.kh.spring.TestClass - 난 info야(2022-11-29 15:14:19)
+WARN : com.kh.spring.TestClass - 난 warn이야(2022-11-29 15:14:19)
+ERROR: com.kh.spring.TestClass - 난 error야(2022-11-29 15:14:19)

@@ -130,9 +130,23 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <label for="userId" class="mr-sm-2">ID : </label>
-                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId" required> <br>
+                        <input type="text" class="form-control mb-2 mr-sm-2" placeholder="Enter ID" id="userId" name="userId" value="${ cookie.saveId.value }" required> <br>
                         <label for="userPwd" class="mr-sm-2">Password : </label>
                         <input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter Password" id="userPwd" name="userPwd" required>
+                        <br>
+                        
+                        <c:choose>
+                        	<c:when test="${ not empty cookie.saveId }">
+                        		<!-- 만약 saveId라는 쿠키가 있다면: 체크박스 체크된 상태 -->
+                        		 <!-- 아이디 저장 체크박스 -->
+                        		<input type="checkbox" id="saveId" name="saveId" value="y" checked><label for="saveId">아이디 저장</label>
+                        	</c:when>
+                        	<c:otherwise>
+                        		<!-- 만약 saveId라는 쿠키가 없다면: 체크박스 체크되지 않은 상태 -->
+                        		<input type="checkbox" id="saveId" name="saveId" value="y"><label for="saveId">아이디 저장</label>
+                        	</c:otherwise>
+                        </c:choose>
+                       
                     </div>
                            
                     <!-- Modal footer -->

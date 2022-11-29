@@ -172,10 +172,21 @@ public class BoardController {
 		
 	}
 	
-	@RequestMapping(value="rinsert.bo")
-	public void ajaxInsertReply(Reply r) {
+	@ResponseBody
+	@RequestMapping(value="rinsert.bo", produces="text/html; charset=UTF-8")
+	public String ajaxInsertReply(Reply r) {
 		
-		System.out.println(r);
+		// System.out.println(r);
+		
+		int result = boardService.insertReply(r);
+		
+		// if(result > 0) {
+		// } else {
+		// }
+		
+		// if문 써도 무방하나 삼항 연산자를 사용해 볼 것!
+		
+		return (result > 0) ? "success" : "fail";
 		
 	}
 	

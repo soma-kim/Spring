@@ -62,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public int insertReply(Reply r) {
-		return 0;
+		return boardDao.insertReply(sqlSession, r);
 	}
 
 	@Override

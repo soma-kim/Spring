@@ -184,7 +184,18 @@
         					replyWriter:"${ loginUser.userId }",
         					replyContent:$("#content").val()
         				},
-        				success : function() {
+        				success : function(result) {
+        					
+        					// "success" 또는 "fail"이라는 문자열이 들어 있음
+        					if(result == "success") {
+        						
+        						// 댓글 작성 성공 시 새로이 댓글 리스트를 불러올 것
+        						// 화면이 깜빡거리지 않고 새롭게 작성한 댓글을 추가 후 리스트가 다시 보여지게 될 것
+        						selectReplyList();
+        						
+        						// 댓글 작성창 초기화
+        						$("#content").val("");
+        					}
         					
         				},
         				error : function() {

@@ -1,5 +1,7 @@
 package com.kh.spring.member.controller;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,7 +226,27 @@ public class MemberController {
 	 */
 	
 	@RequestMapping("login.me")
-	public ModelAndView loginMember(Member m, ModelAndView mv, HttpSession session) {
+	public ModelAndView loginMember(Member m, ModelAndView mv,
+									HttpSession session, String saveId,
+									HttpServletResponse response) {
+		// 쿠키를 응답데이터로 넘기기 위해 HttpServletResponse까지 매개변수로 받음
+		
+		if(saveId != null && saveId.equals("y")) {
+			// 요청 시 전달값 중에 saveId가 y라면 saveId라는 키값으로 현재 아이디값을 쿠키 생성
+			// 새로 만든 쿠키의 saveId라는 키값에 m.getUserId()로 받아온 값을 밸류로 넣겠다
+			Cookie cookie = new Cookie("saveId", m.getUserId());
+			cookie.setMaxAge(24 * 60 * 60 * 1); // 1초 단위, 유효기간 1일
+			response.addCookie(cookie);
+			
+		} else {
+			// 요청 시 전달값 중에 saveId가 y가 아니라면 쿠키 삭제
+			// 쿠키는 삭제 구문이 없으나 같은 키값으로 유효기간을 0일로 지정해서 덮어씌우면 삭제 효과를 볼 수 있음!
+			Cookie cookie = new Cookie("saveId", m.getUserId());
+			cookie.setMaxAge(0); // 쿠키 삭제와 같은 의미
+			response.addCookie(cookie);
+
+		}
+		
 		
 		// 암호화 작업 전 로직
 		/*

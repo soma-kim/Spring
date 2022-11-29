@@ -83,4 +83,14 @@
 		=> 스프링에 의해 생성된 객체들은 Spring Container에 담겨 있음!
 	-->
 	
+	<!-- 내가 만든 인터셉트를 요청url에 가기 전에 거쳐가게 해 줄래요! -->
+	<interceptors>
+		<interceptor>
+			<mapping path="/myPage.me" />
+			<mapping path="/enrollForm.bo" />
+			<mapping path="/update.me" />
+			<beans:bean class="com.kh.spring.common.interceptor.LoginInterceptor" id="loginInterceptor" /> <!-- 클래스 타입을 객체로 쓰겠다라고 빈을 등록 -->
+		</interceptor>
+	</interceptors>
+	
 </beans:beans>
